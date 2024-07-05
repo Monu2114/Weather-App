@@ -10,6 +10,9 @@ async function getWeather(place){
     try{
         const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=7eb784e77fd045e3bc0164711240307&q=${place}`);
         const data = await response.json();
+        if (!data || !data.current || !data.current.condition) {
+            throw new Error('Invalid data structure');
+        }
         return{
           temp_c: data.current.temp_c,
           temp_f: data.current.temp_f,
@@ -49,7 +52,7 @@ function displayData(data){
         container.style.backgroundImage = 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBPwNC6rS6RF8vWHp8xr9GGEWRbQKJi6DCFg&s")';
     }
     else if(data.weather.toLowerCase().includes('clear')) {
-        container.style.backgroundImage = 'url("https://www.wallpaperflare.com/static/101/1004/1004982-sky-blue-clear-sky-wallpaper.jpg")';
+        container.style.backgroundImage = 'url("https://png.pngtree.com/thumb_back/fh260/background/20230617/pngtree-lakescape-landscape-nature-scenery-hd-image_2950137.jpg")';
     }
     else if(data.weather.toLowerCase().includes('snow')) {
         container.style.backgroundImage = 'url("https://c4.wallpaperflare.com/wallpaper/814/791/615/ice-snow-snowfall-winter-wallpaper-preview.jpg")';
@@ -60,7 +63,19 @@ function displayData(data){
 
     card.appendChild(content);
     container.appendChild(card);
-    card.value = '';    
+    card.value = '';   
 }
-time.innerHTML = new Date().toLocaleTimeString();
+// time.innerHTML = new Date().toLocaleTimeString();
 
+ function playAudioOnce() {
+            new Audio('music.mp3').play().then(() => {
+                console.log('Playing audio');
+            }).catch(error => {
+                console.error('Error playing audio:', error);
+            });
+
+            // Remove the event listener after the first click
+            input.removeEventListener('click', playAudioOnce);
+        }
+
+        input.addEventListener('click', playAudioOnce);
